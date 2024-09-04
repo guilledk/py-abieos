@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 
-import importlib
+from pathlib import Path
 
-_abieos = importlib.import_module('_abieos')
+import importlib.util
+import sys
+
+spec = importlib.util.spec_from_file_location('_abieos', Path(__file__).parent / '_abieos.so')
+_abieos = importlib.util.module_from_spec(spec)
+sys.modules['_abieos'] = _abieos
+spec.loader.exec_module(_abieos)
 
 
 Name = _abieos.Name

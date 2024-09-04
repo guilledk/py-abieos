@@ -20,4 +20,4 @@ WORKDIR /root/target/build
 RUN cmake .. && make -j${JOB_COUNT}
 
 FROM scratch AS export-stage
-COPY --from=build-stage /root/target/build/_abieos*.so src/_abieos.so
+COPY --from=build-stage /root/target/build/_abieos*.so src/py_abieos/_abieos.so
