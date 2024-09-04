@@ -1,0 +1,5 @@
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(ABIEOS_ONLY_LIBRARY, TRUE)
+add_subdirectory(abieos)
+add_subdirectory(pybind11)
