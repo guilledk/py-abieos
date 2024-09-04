@@ -1,8 +1,9 @@
 name: Build and Release
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags (e.g., v1.0.0)
 
 jobs:
   build:
@@ -10,11 +11,17 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.11, 3.12, 3.13]
+        python-version: [3.11.9]
 
     steps:
-    - name: Checkout code
+    - name: Checkout code with submodules
       uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Checkout submodules
+      run: |
+        git submodule update --init --recursive
 
     - name: Set up Docker BuildKit
       run: |
@@ -36,14 +43,44 @@ jobs:
 
     - name: Build with Poetry
       run: |
-        poetry install --no-dev
+        poetry install --with=dev
         poetry build
 
-    - name: Upload release assets
-      uses: actions/upload-release-asset@v1
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        release_id: ${{ github.event.release.id }}
-        asset_path: ./dist/
-        asset_name: "build-${{ matrix.python-version }}.tar.gz"
-        asset_content_type: application/gzip
+        name: dist-artifacts
+        path: dist/*
+
+  upload_release:
+    permissions: write-all
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code with submodules
+      uses: actions/checkout@v3
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist-artifacts
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload to GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        for file in *.tar.gz *.whl; do
+          echo "Uploading $file"
+          gh release upload ${{ github.ref_name }} "$file"
+        done

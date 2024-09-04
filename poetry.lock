@@ -193,6 +193,20 @@ files = [
 ]
 
 [[package]]
+name = "wheel"
+version = "0.44.0"
+description = "A built-package format for Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "wheel-0.44.0-py3-none-any.whl", hash = "sha256:2376a90c98cc337d18623527a97c31797bd02bad0033d41547043a1cbfbe448f"},
+    {file = "wheel-0.44.0.tar.gz", hash = "sha256:a29c3f2817e95ab89aa4660681ad547c0e9547f20e75b0562fe7723c9a2a9d49"},
+]
+
+[package.extras]
+test = ["pytest (>=6.0.0)", "setuptools (>=65)"]
+
+[[package]]
 name = "wmctrl"
 version = "0.5"
 description = "A tool to programmatically control windows inside X"
@@ -211,5 +225,5 @@ test = ["pytest"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.8"
-content-hash = "abf812694ab758b59d18258cb4be7fb41bd073bcb0dfb50e7ac321630e654bf7"
+python-versions = "^3.11"
+content-hash = "36110fade31f778d844c6511c283d0eb84392fd6b988b88d18343aa2285b774c"
