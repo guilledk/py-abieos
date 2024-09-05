@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "py-abieos"
-version = "0.1.3"
+version = "0.1.4"
 description = "Bindings for C++ abieos"
 authors = ["Guillermo Rodriguez <guillermo@telos.net>"]
 packages = [{include = 'py_abieos', from = 'src'}]
@@ -10,7 +10,7 @@ include = [
 build = 'build.py'
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
